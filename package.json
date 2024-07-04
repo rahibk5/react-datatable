@@ -1,14 +1,17 @@
 {
   "name": "react-table-adv",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rollup -c rollup.config.mjs"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "react",
+    "react-table"
+  ],
+  "author": "Muhammed Rahib K",
   "license": "ISC",
   "description": "",
   "files": [

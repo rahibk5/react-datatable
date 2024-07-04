@@ -47,6 +47,17 @@ You can install React Table Adv via npm :
 npm install react-table-adv
 ```
 
+add this code  to tailwind.config.js
+```js 
+//tailwind.config.ts
+....... 
+content: [
+    ...,
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/react-table-adv/dist/**/*.{js,ts,jsx,tsx}"
+  ],
+  .....
+```
 ## Usage
 
 Import the `Table` component in your React application and configure it with your data:
