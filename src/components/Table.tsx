@@ -29,7 +29,6 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   vacation: "warning",
 };
 
-
 const INITIAL_VISIBLE_COLUMNS = ["index", "name", "role", "status", "actions"];
 
 interface Props {
@@ -203,6 +202,7 @@ export default function App({ columns, data, filterOptions, searchable }: Props)
               <select
                 className="bg-transparent outline-none text-default-400 text-small border border-gray-200 p-1 rounded-lg mr-2"
                 onChange={onRowsPerPageChange}
+                value={rowsPerPage} // Ensure the dropdown reflects the current state
               >
                 <option value="5">5</option>
                 <option value="10">10</option>
@@ -265,6 +265,7 @@ export default function App({ columns, data, filterOptions, searchable }: Props)
     onSearchChange,
     onRowsPerPageChange,
     filterOptions,
+    rowsPerPage // Ensure the dropdown reflects the current state
   ]);
 
   const bottomContent = React.useMemo(() => {
@@ -294,7 +295,7 @@ export default function App({ columns, data, filterOptions, searchable }: Props)
         />
       </div>
     );
-  }, [selectedKeys, paginatedItems.length, page, pages, hasSearchFilter]);
+  }, [selectedKeys, paginatedItems.length, page, pages, hasSearchFilter, rowsPerPage, filteredAndSortedItems.length]);
 
   const classNames = React.useMemo(
     () => ({

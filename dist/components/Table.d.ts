@@ -18,5 +18,5 @@ interface Props {
     }[];
     searchable?: boolean;
 }
-export default function App({ columns, data, filterOptions, searchable }: Props): React.JSX.Element;
+export default function App({ columns, data, filterOptions, searchable }: Props): import("react/jsx-runtime").JSX.Element;
 export {};

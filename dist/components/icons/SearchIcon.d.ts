@@ -1,3 +1,2 @@
-import React from "react";
 import { IconSvgProps } from "./types";
-export declare const SearchIcon: (props: IconSvgProps) => React.JSX.Element;
+export declare const SearchIcon: (props: IconSvgProps) => import("react/jsx-runtime").JSX.Element;

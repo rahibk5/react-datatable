@@ -1,7 +1,5 @@
-'use strict';
-
-var React = require('react');
-var react = require('@nextui-org/react');
+import React from 'react';
+import { Dropdown, DropdownTrigger, Button, DropdownMenu, DropdownItem, Chip, Input, Pagination, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from '@nextui-org/react';
 
 var jsxRuntime = {exports: {}};
 
@@ -1493,9 +1491,9 @@ function App({ columns, data, filterOptions, searchable }) {
             case "role":
                 return (jsxRuntimeExports.jsx("div", { className: "flex flex-col", children: jsxRuntimeExports.jsx("p", { className: "text-bold text-small capitalize", children: cellValue }) }));
             case "status":
-                return (jsxRuntimeExports.jsx(react.Chip, { className: "capitalize border-none gap-1 text-default-600", color: statusColorMap[item.status], size: "sm", variant: "dot", children: cellValue }));
+                return (jsxRuntimeExports.jsx(Chip, { className: "capitalize border-none gap-1 text-default-600", color: statusColorMap[item.status], size: "sm", variant: "dot", children: cellValue }));
             case "actions":
-                return (jsxRuntimeExports.jsx("div", { className: "relative flex justify-end items-center gap-2", children: jsxRuntimeExports.jsxs(react.Dropdown, { className: "bg-background border-1 border-default-200", children: [jsxRuntimeExports.jsx(react.DropdownTrigger, { children: jsxRuntimeExports.jsx(react.Button, { isIconOnly: true, radius: "full", size: "sm", variant: "light", children: jsxRuntimeExports.jsx(VerticalDotsIcon, { className: "text-default-400" }) }) }), jsxRuntimeExports.jsxs(react.DropdownMenu, { children: [jsxRuntimeExports.jsx(react.DropdownItem, { children: "View" }), jsxRuntimeExports.jsx(react.DropdownItem, { children: "Edit" }), jsxRuntimeExports.jsx(react.DropdownItem, { children: "Delete" })] })] }) }));
+                return (jsxRuntimeExports.jsx("div", { className: "relative flex justify-end items-center gap-2", children: jsxRuntimeExports.jsxs(Dropdown, { className: "bg-background border-1 border-default-200", children: [jsxRuntimeExports.jsx(DropdownTrigger, { children: jsxRuntimeExports.jsx(Button, { isIconOnly: true, radius: "full", size: "sm", variant: "light", children: jsxRuntimeExports.jsx(VerticalDotsIcon, { className: "text-default-400" }) }) }), jsxRuntimeExports.jsxs(DropdownMenu, { children: [jsxRuntimeExports.jsx(DropdownItem, { children: "View" }), jsxRuntimeExports.jsx(DropdownItem, { children: "Edit" }), jsxRuntimeExports.jsx(DropdownItem, { children: "Delete" })] })] }) }));
             default:
                 return cellValue;
         }
@@ -1514,7 +1512,7 @@ function App({ columns, data, filterOptions, searchable }) {
         }
     }, []);
     const topContent = React.useMemo(() => {
-        return (jsxRuntimeExports.jsx("div", { className: "flex flex-col gap-4", children: jsxRuntimeExports.jsxs("div", { className: "flex justify-between gap-3 items-end", children: [jsxRuntimeExports.jsx("div", { className: "flex justify-between items-center", children: jsxRuntimeExports.jsxs("label", { className: "flex items-center text-default-400 text-small", children: [jsxRuntimeExports.jsxs("select", { className: "bg-transparent outline-none text-default-400 text-small border border-gray-200 p-1 rounded-lg mr-2", onChange: onRowsPerPageChange, value: rowsPerPage, children: [jsxRuntimeExports.jsx("option", { value: "5", children: "5" }), jsxRuntimeExports.jsx("option", { value: "10", children: "10" }), jsxRuntimeExports.jsx("option", { value: "15", children: "15" })] }), "entries per page"] }) }), jsxRuntimeExports.jsxs("div", { className: "flex gap-3", children: [filterOptions && filterOptions.map((filter) => (jsxRuntimeExports.jsxs(react.Dropdown, { children: [jsxRuntimeExports.jsx(react.DropdownTrigger, { className: "hidden sm:flex", children: jsxRuntimeExports.jsx(react.Button, { endContent: jsxRuntimeExports.jsx(ChevronDownIcon, { className: "text-small" }), size: "sm", variant: "flat", className: "min-w-min", children: filter.name }) }), jsxRuntimeExports.jsx(react.DropdownMenu, { disallowEmptySelection: true, "aria-label": "Table Columns", closeOnSelect: false, selectedKeys: filters[filter.uid] || new Set(), selectionMode: "multiple", onSelectionChange: (selection) => updateFilter(filter.uid, selection), children: filter.options.map((option) => (jsxRuntimeExports.jsx(react.DropdownItem, { className: "capitalize", children: capitalize(option.name) }, option.uid))) })] }, filter.uid))), searchable && (jsxRuntimeExports.jsx(react.Input, { isClearable: true, classNames: {
+        return (jsxRuntimeExports.jsx("div", { className: "flex flex-col gap-4", children: jsxRuntimeExports.jsxs("div", { className: "flex justify-between gap-3 items-end", children: [jsxRuntimeExports.jsx("div", { className: "flex justify-between items-center", children: jsxRuntimeExports.jsxs("label", { className: "flex items-center text-default-400 text-small", children: [jsxRuntimeExports.jsxs("select", { className: "bg-transparent outline-none text-default-400 text-small border border-gray-200 p-1 rounded-lg mr-2", onChange: onRowsPerPageChange, value: rowsPerPage, children: [jsxRuntimeExports.jsx("option", { value: "5", children: "5" }), jsxRuntimeExports.jsx("option", { value: "10", children: "10" }), jsxRuntimeExports.jsx("option", { value: "15", children: "15" })] }), "entries per page"] }) }), jsxRuntimeExports.jsxs("div", { className: "flex gap-3", children: [filterOptions && filterOptions.map((filter) => (jsxRuntimeExports.jsxs(Dropdown, { children: [jsxRuntimeExports.jsx(DropdownTrigger, { className: "hidden sm:flex", children: jsxRuntimeExports.jsx(Button, { endContent: jsxRuntimeExports.jsx(ChevronDownIcon, { className: "text-small" }), size: "sm", variant: "flat", className: "min-w-min", children: filter.name }) }), jsxRuntimeExports.jsx(DropdownMenu, { disallowEmptySelection: true, "aria-label": "Table Columns", closeOnSelect: false, selectedKeys: filters[filter.uid] || new Set(), selectionMode: "multiple", onSelectionChange: (selection) => updateFilter(filter.uid, selection), children: filter.options.map((option) => (jsxRuntimeExports.jsx(DropdownItem, { className: "capitalize", children: capitalize(option.name) }, option.uid))) })] }, filter.uid))), searchable && (jsxRuntimeExports.jsx(Input, { isClearable: true, classNames: {
                                     base: "w-full",
                                     inputWrapper: "border-1",
                                 }, placeholder: "Search...", size: "sm", startContent: jsxRuntimeExports.jsx(SearchIcon, { className: "text-default-300" }), value: filterValue, variant: "bordered", onClear: () => setFilterValue(""), onValueChange: onSearchChange }))] })] }) }));
@@ -1534,7 +1532,7 @@ function App({ columns, data, filterOptions, searchable }) {
         if (filteredAndSortedItems.length === 0) {
             entriesText = "No entries found";
         }
-        return (jsxRuntimeExports.jsxs("div", { className: "py-2 px-2 flex justify-between items-center", children: [jsxRuntimeExports.jsx("div", { className: "text-default-400 text-small", children: entriesText }), jsxRuntimeExports.jsx(react.Pagination, { showControls: true, classNames: {
+        return (jsxRuntimeExports.jsxs("div", { className: "py-2 px-2 flex justify-between items-center", children: [jsxRuntimeExports.jsx("div", { className: "text-default-400 text-small", children: entriesText }), jsxRuntimeExports.jsx(Pagination, { showControls: true, classNames: {
                         cursor: "bg-foreground text-background",
                     }, color: "default", page: page, total: pages, variant: "light", onChange: setPage })] }));
     }, [selectedKeys, paginatedItems.length, page, pages, hasSearchFilter, rowsPerPage, filteredAndSortedItems.length]);
@@ -1548,8 +1546,8 @@ function App({ columns, data, filterOptions, searchable }) {
             "border-divider",
         ],
     }), []);
-    return (jsxRuntimeExports.jsx("div", { className: "w-full flex flex-col", children: jsxRuntimeExports.jsxs(react.Table, { "aria-label": "Example table with client side sorting", bottomContent: bottomContent, classNames: classNames, sortDescriptor: sortDescriptor, topContent: topContent, onSortChange: setSortDescriptor, children: [jsxRuntimeExports.jsx(react.TableHeader, { columns: headerColumns, children: (column) => (jsxRuntimeExports.jsx(react.TableColumn, { align: column.uid === "actions" ? "center" : "start", allowsSorting: column.sortable, children: column.name }, column.uid)) }), jsxRuntimeExports.jsx(react.TableBody, { emptyContent: "No users found", items: paginatedItems, children: (item) => (jsxRuntimeExports.jsx(react.TableRow, { children: (columnKey) => jsxRuntimeExports.jsx(react.TableCell, { children: renderCell(item, columnKey.toString()) }) }, item.id)) })] }) }));
+    return (jsxRuntimeExports.jsx("div", { className: "w-full flex flex-col", children: jsxRuntimeExports.jsxs(Table, { "aria-label": "Example table with client side sorting", bottomContent: bottomContent, classNames: classNames, sortDescriptor: sortDescriptor, topContent: topContent, onSortChange: setSortDescriptor, children: [jsxRuntimeExports.jsx(TableHeader, { columns: headerColumns, children: (column) => (jsxRuntimeExports.jsx(TableColumn, { align: column.uid === "actions" ? "center" : "start", allowsSorting: column.sortable, children: column.name }, column.uid)) }), jsxRuntimeExports.jsx(TableBody, { emptyContent: "No users found", items: paginatedItems, children: (item) => (jsxRuntimeExports.jsx(TableRow, { children: (columnKey) => jsxRuntimeExports.jsx(TableCell, { children: renderCell(item, columnKey.toString()) }) }, item.id)) })] }) }));
 }
 
-exports.Table = App;
-//# sourceMappingURL=index.js.map
+export { App as Table };
+//# sourceMappingURL=index.esm.js.map
