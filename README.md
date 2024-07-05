@@ -1,5 +1,6 @@
 # Advanced React Datatable 
 React Table Adv is a customizable and feature-rich table component for React applications, designed to handle complex data display and interaction.
+### Note : use in your next js projects.
 
 ## Features
 
