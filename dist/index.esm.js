@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dropdown, DropdownTrigger, Button, DropdownMenu, DropdownItem, Input, Pagination, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from '@nextui-org/react';
+import { Autocomplete, AutocompleteItem, Dropdown, DropdownTrigger, Button, DropdownMenu, DropdownItem, Input, Pagination, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from '@nextui-org/react';
 
 var jsxRuntime = {exports: {}};
 
@@ -1416,10 +1416,19 @@ function capitalize(str) {
 
 const INITIAL_VISIBLE_COLUMNS = ["index", "name", "role", "status", "actions"];
 function App({ columns, data, filterOptions, searchable, customClass }) {
+    const initialFilters = React.useMemo(() => {
+        const filters = {};
+        if (filterOptions) {
+            filterOptions.forEach((filter) => {
+                filters[filter.uid] = new Set(filter.selectedKeys || []);
+            });
+        }
+        return filters;
+    }, [filterOptions]);
     const [filterValue, setFilterValue] = React.useState("");
-    const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
     const [visibleColumns, setVisibleColumns] = React.useState(new Set(INITIAL_VISIBLE_COLUMNS));
-    const [filters, setFilters] = React.useState({});
+    const [filters, setFilters] = React.useState(initialFilters);
+    const [filterSearch, setFilterSearch] = React.useState({});
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [sortDescriptor, setSortDescriptor] = React.useState({ column: "index", direction: "ascending" });
     const [page, setPage] = React.useState(1);
@@ -1430,13 +1439,33 @@ function App({ columns, data, filterOptions, searchable, customClass }) {
     if (typeof searchable === 'undefined') {
         searchable = true;
     }
+    const processFilterOptions = (filterOptions) => {
+        return filterOptions.map((option) => {
+            var _a;
+            return (Object.assign(Object.assign({}, option), { searchable: (_a = option.searchable) !== null && _a !== void 0 ? _a : false // Default to false if not provided
+             }));
+        });
+    };
+    const processedFilterOptions = React.useMemo(() => processFilterOptions(filterOptions), [filterOptions]);
     const headerColumns = React.useMemo(() => {
         if (visibleColumns === "all")
             return [...columns];
         return [...columns];
     }, [visibleColumns, columns]);
+    const filteredOptions = (filter) => {
+        if (!filterSearch[filter.uid]) {
+            return filter.options;
+        }
+        return filter.options.filter(option => option.name.toLowerCase().includes(filterSearch[filter.uid].toLowerCase()));
+    };
     const updateFilter = (filterUid, selection) => {
-        setFilters((prevFilters) => (Object.assign(Object.assign({}, prevFilters), { [filterUid]: selection })));
+        if (!selection || selection === "all" || selection.size === 0) {
+            // When no selection is made, show all items by clearing the filter for this UID
+            setFilters((prevFilters) => (Object.assign(Object.assign({}, prevFilters), { [filterUid]: new Set() })));
+        }
+        else {
+            setFilters((prevFilters) => (Object.assign(Object.assign({}, prevFilters), { [filterUid]: selection })));
+        }
     };
     const filteredAndSortedItems = React.useMemo(() => {
         let filteredData = [...data];
@@ -1446,7 +1475,7 @@ function App({ columns, data, filterOptions, searchable, customClass }) {
         if (filterOptions) {
             filterOptions.forEach((filterOption) => {
                 const filterValue = filters[filterOption.uid];
-                if (filterValue && filterValue !== "all" && Array.from(filterValue).length !== filterOption.options.length) {
+                if (filterValue && filterValue !== "all" && (filterValue instanceof Set && filterValue.size > 0)) {
                     filteredData = filteredData.filter((item) => Array.from(filterValue).includes(item[filterOption.uid]));
                 }
             });
@@ -1493,8 +1522,12 @@ function App({ columns, data, filterOptions, searchable, customClass }) {
             setFilterValue("");
         }
     }, []);
+    const renderDropdowns = React.useMemo(() => {
+        return processedFilterOptions === null || processedFilterOptions === void 0 ? void 0 : processedFilterOptions.map((filter) => (filter.searchable ? (jsxRuntimeExports.jsx(Autocomplete, { label: filter.name, className: "max-w-xs", children: filteredOptions(filter).map((option) => (jsxRuntimeExports.jsx(AutocompleteItem, { value: option.uid, children: option.name }, option.uid))) })) :
+            (jsxRuntimeExports.jsxs(Dropdown, { children: [jsxRuntimeExports.jsx(DropdownTrigger, { className: "hidden sm:flex", children: jsxRuntimeExports.jsx(Button, { endContent: jsxRuntimeExports.jsx(ChevronDownIcon, { className: "text-small" }), size: "sm", variant: "flat", className: "min-w-min rounded px-3 py-2", children: filter.name }) }), jsxRuntimeExports.jsxs(DropdownMenu, { disallowEmptySelection: false, "aria-label": "Table Columns", closeOnSelect: false, selectedKeys: filters[filter.uid] || new Set(), selectionMode: (filter === null || filter === void 0 ? void 0 : filter.selectMode) || "single", onSelectionChange: (selection) => updateFilter(filter.uid, selection), className: "bg-white dark:bg-[#122031] rounded shadow", children: [filter.searchable && (jsxRuntimeExports.jsx(DropdownItem, { className: "p-2", children: jsxRuntimeExports.jsx(Input, { isClearable: true, placeholder: `Search ${filter.name}...`, size: "sm", value: filterSearch[filter.uid] || "", onClear: () => setFilterSearch(Object.assign(Object.assign({}, filterSearch), { [filter.uid]: "" })), onValueChange: (value) => setFilterSearch(Object.assign(Object.assign({}, filterSearch), { [filter.uid]: value })) }) }, "search")), filteredOptions(filter).map((option) => (jsxRuntimeExports.jsx(DropdownItem, { className: "capitalize", children: capitalize(option.name) }, option.uid)))] })] }, filter.uid))));
+    }, [filterOptions, filters, filterSearch]);
     const topContent = React.useMemo(() => {
-        return (jsxRuntimeExports.jsx("div", { className: "flex flex-col gap-4", children: jsxRuntimeExports.jsxs("div", { className: "flex justify-between gap-3 items-end", children: [jsxRuntimeExports.jsx("div", { className: "flex justify-between items-center", children: jsxRuntimeExports.jsxs("label", { className: "flex items-center text-default-400 text-small", children: [jsxRuntimeExports.jsxs("select", { className: "bg-transparent outline-none text-default-400 text-small border border-gray-200 p-1 rounded-lg mr-2", onChange: onRowsPerPageChange, value: rowsPerPage, children: [jsxRuntimeExports.jsx("option", { value: "10", children: "10" }), jsxRuntimeExports.jsx("option", { value: "15", children: "15" }), jsxRuntimeExports.jsx("option", { value: "20", children: "20" }), jsxRuntimeExports.jsx("option", { value: "25", children: "25" })] }), "entries per page"] }) }), jsxRuntimeExports.jsxs("div", { className: "flex gap-3", children: [filterOptions && filterOptions.map((filter) => (jsxRuntimeExports.jsxs(Dropdown, { children: [jsxRuntimeExports.jsx(DropdownTrigger, { className: "hidden sm:flex", children: jsxRuntimeExports.jsx(Button, { endContent: jsxRuntimeExports.jsx(ChevronDownIcon, { className: "text-small" }), size: "sm", variant: "flat", className: "min-w-min border rounded px-4 py-2", children: filter.name }) }), jsxRuntimeExports.jsx(DropdownMenu, { disallowEmptySelection: true, "aria-label": "Table Columns", closeOnSelect: false, selectedKeys: filters[filter.uid] || new Set(), selectionMode: (filter === null || filter === void 0 ? void 0 : filter.selectMode) || "single", onSelectionChange: (selection) => updateFilter(filter.uid, selection), className: "bg-white dark:bg-[#122031] rounded shadow", children: filter.options.map((option) => (jsxRuntimeExports.jsx(DropdownItem, { className: "capitalize", children: capitalize(option.name) }, option.uid))) })] }, filter.uid))), searchable && (jsxRuntimeExports.jsx(Input, { isClearable: true, classNames: {
+        return (jsxRuntimeExports.jsx("div", { className: "flex flex-col gap-4", children: jsxRuntimeExports.jsxs("div", { className: "flex justify-between gap-3 items-end", children: [jsxRuntimeExports.jsx("div", { className: "flex justify-between items-center", children: jsxRuntimeExports.jsxs("label", { className: "flex items-center text-default-400 text-small", children: [jsxRuntimeExports.jsxs("select", { className: "bg-transparent outline-none text-default-400 text-small border border-gray-200 p-1 rounded-lg mr-2", onChange: onRowsPerPageChange, value: rowsPerPage, children: [jsxRuntimeExports.jsx("option", { value: "10", children: "10" }), jsxRuntimeExports.jsx("option", { value: "15", children: "15" }), jsxRuntimeExports.jsx("option", { value: "20", children: "20" }), jsxRuntimeExports.jsx("option", { value: "25", children: "25" })] }), "entries per page"] }) }), jsxRuntimeExports.jsxs("div", { className: "flex gap-3", children: [renderDropdowns, searchable && (jsxRuntimeExports.jsx(Input, { isClearable: true, classNames: {
                                     base: "w-full",
                                     inputWrapper: "border-1",
                                 }, placeholder: "Search...", size: "sm", startContent: jsxRuntimeExports.jsx(SearchIcon, { className: "text-default-300" }), value: filterValue, variant: "bordered", onClear: () => setFilterValue(""), onValueChange: onSearchChange }))] })] }) }));
@@ -1517,7 +1550,7 @@ function App({ columns, data, filterOptions, searchable, customClass }) {
         return (jsxRuntimeExports.jsxs("div", { className: "py-2 px-2 flex justify-between items-center", children: [jsxRuntimeExports.jsx("div", { className: "text-default-400 text-small", children: entriesText }), jsxRuntimeExports.jsx(Pagination, { showControls: true, classNames: {
                         cursor: "bg-foreground text-background",
                     }, color: "default", page: page, total: pages, variant: "light", onChange: setPage })] }));
-    }, [selectedKeys, paginatedItems.length, page, pages, hasSearchFilter, rowsPerPage, filteredAndSortedItems.length]);
+    }, [paginatedItems.length, page, pages, hasSearchFilter, rowsPerPage, filteredAndSortedItems.length]);
     const classNames = React.useMemo(() => customClass || {
         th: ["bg-transparent", "text-default-500", "border-b", "border-divider"],
         td: [

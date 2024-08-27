@@ -11,7 +11,9 @@ interface Props {
     filterOptions?: {
         uid: string;
         name: string;
+        searchable?: boolean;
         selectMode: "single" | "multiple";
+        selectedKeys?: any[];
         options: {
             uid: string | number;
             name: string;

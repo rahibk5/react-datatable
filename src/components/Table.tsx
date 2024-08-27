@@ -17,6 +17,8 @@ import {
   Selection,
   ChipProps,
   SortDescriptor,
+  Autocomplete,
+  AutocompleteItem,
 } from "@nextui-org/react";
 import { VerticalDotsIcon } from "./icons/VerticalDotsIcon";
 import { ChevronDownIcon } from "./icons/ChevronDownIcon";
@@ -43,7 +45,9 @@ interface Props {
   filterOptions?: {
     uid: string;
     name: string;
+    searchable?: boolean;
     selectMode: "single" | "multiple";
+    selectedKeys?: any[];
     options: { uid: string | number; name: string }[];
   }[];
   searchable?: boolean;
@@ -63,10 +67,20 @@ interface Props {
 export default function App({ columns, data, filterOptions, searchable, customClass }: Props) {
   type Model = typeof data[0];
 
+  const initialFilters = React.useMemo(() => {
+    const filters: { [key: string]: Selection } = {};
+    if (filterOptions) {
+      filterOptions.forEach((filter) => {
+        filters[filter.uid] = new Set(filter.selectedKeys || []);
+      });
+    }
+    return filters;
+  }, [filterOptions]);
+
   const [filterValue, setFilterValue] = React.useState("");
-  const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
-  const [filters, setFilters] = React.useState<{ [key: string]: Selection }>({});
+  const [filters, setFilters] = React.useState<{ [key: string]: Selection }>(initialFilters);
+  const [filterSearch, setFilterSearch] = React.useState<{ [key: string]: string }>({});
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({ column: "index", direction: "ascending" });
   const [page, setPage] = React.useState(1);
@@ -80,22 +94,48 @@ export default function App({ columns, data, filterOptions, searchable, customCl
     searchable = true;
   }
 
+  const processFilterOptions = (filterOptions: any) => {
+    return filterOptions.map((option: { searchable: any; }) => ({
+      ...option,
+      searchable: option.searchable ?? false  // Default to false if not provided
+    }));
+  };
+
+  const processedFilterOptions = React.useMemo(() => processFilterOptions(filterOptions), [filterOptions]);
+  
   const headerColumns = React.useMemo(() => {
     if (visibleColumns === "all") return [...columns];
 
     return [...columns];
   }, [visibleColumns, columns]);
 
+  const filteredOptions = (filter: typeof filterOptions[0]) => {
+    if (!filterSearch[filter.uid]) {
+      return filter.options;
+    }
+    return filter.options.filter(option =>
+      option.name.toLowerCase().includes(filterSearch[filter.uid].toLowerCase())
+    );
+  };
+
   const updateFilter = (filterUid: string, selection: Selection) => {
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [filterUid]: selection,
-    }));
+    if (!selection || selection === "all" || selection.size === 0) {
+      // When no selection is made, show all items by clearing the filter for this UID
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        [filterUid]: new Set(),
+      }));
+    } else {
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        [filterUid]: selection,
+      }));
+    }
   };
 
   const filteredAndSortedItems = React.useMemo(() => {
     let filteredData = [...data];
-
+  
     if (hasSearchFilter) {
       filteredData = filteredData.filter((item) =>
         Object.values(item).some(value =>
@@ -103,23 +143,23 @@ export default function App({ columns, data, filterOptions, searchable, customCl
         )
       );
     }
-
+  
     if (filterOptions) {
       filterOptions.forEach((filterOption) => {
         const filterValue = filters[filterOption.uid];
-        if (filterValue && filterValue !== "all" && Array.from(filterValue).length !== filterOption.options.length) {
+        if (filterValue && filterValue !== "all" && (filterValue instanceof Set && filterValue.size > 0)) {
           filteredData = filteredData.filter((item) =>
             Array.from(filterValue).includes(item[filterOption.uid])
           );
         }
       });
     }
-
+  
     return filteredData.sort((a: Model, b: Model) => {
       const first = a[sortDescriptor.column as keyof Model] as number;
       const second = b[sortDescriptor.column as keyof Model] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
-
+  
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [data, filterValue, filters, sortDescriptor, filterOptions]);
@@ -169,6 +209,67 @@ export default function App({ columns, data, filterOptions, searchable, customCl
     }
   }, []);
 
+
+  const renderDropdowns = React.useMemo(() => {
+    return processedFilterOptions?.map((filter: any) => (
+      filter.searchable ? (
+        <Autocomplete 
+        label={filter.name}
+        className="max-w-xs" 
+      >
+        {filteredOptions(filter).map((option: any) => (
+          <AutocompleteItem key={option.uid} value={option.uid}>
+            {option.name}
+          </AutocompleteItem>
+        ))}
+      </Autocomplete>
+      ) :
+      
+      (
+        <Dropdown key={filter.uid}>
+        <DropdownTrigger className="hidden sm:flex">
+          <Button
+            endContent={<ChevronDownIcon className="text-small" />}
+            size="sm"
+            variant="flat"
+            className="min-w-min rounded px-3 py-2"
+          >
+            {filter.name}
+          </Button>
+        </DropdownTrigger>
+        <DropdownMenu
+          disallowEmptySelection={false}
+          aria-label="Table Columns"
+          closeOnSelect={false}
+          selectedKeys={filters[filter.uid] || new Set()}
+          selectionMode={filter?.selectMode || "single"}
+          onSelectionChange={(selection) => updateFilter(filter.uid, selection)}
+          className="bg-white dark:bg-[#122031] rounded shadow"
+        >
+          {filter.searchable && (
+            <DropdownItem key="search" className="p-2">
+              <Input
+                isClearable
+                placeholder={`Search ${filter.name}...`}
+                size="sm"
+                value={filterSearch[filter.uid] || ""}
+                onClear={() => setFilterSearch({ ...filterSearch, [filter.uid]: "" })}
+                onValueChange={(value) => setFilterSearch({ ...filterSearch, [filter.uid]: value })}
+              />
+            </DropdownItem>
+          )}
+          {filteredOptions(filter).map((option) => (
+            <DropdownItem key={option.uid} className="capitalize">
+              {capitalize(option.name)}
+            </DropdownItem>
+          ))}
+        </DropdownMenu>
+      </Dropdown>
+      )
+      
+    ));
+  }, [filterOptions, filters, filterSearch]);
+
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
@@ -189,35 +290,7 @@ export default function App({ columns, data, filterOptions, searchable, customCl
             </label>
           </div>
           <div className="flex gap-3">
-          {filterOptions && filterOptions.map((filter) => (
-              <Dropdown key={filter.uid}>
-                <DropdownTrigger className="hidden sm:flex">
-                  <Button
-                    endContent={<ChevronDownIcon className="text-small" />}
-                    size="sm"
-                    variant="flat"
-                    className="min-w-min rounded px-4 py-2"
-                  >
-                    {filter.name}
-                  </Button>
-                </DropdownTrigger>
-                <DropdownMenu
-                  disallowEmptySelection
-                  aria-label="Table Columns"
-                  closeOnSelect={false}
-                  selectedKeys={filters[filter.uid] || new Set()}
-                  selectionMode={filter?.selectMode || "single"}
-                  onSelectionChange={(selection) => updateFilter(filter.uid, selection)}
-                  className="bg-white dark:bg-[#122031] rounded shadow"
-                >
-                  {filter.options.map((option) => (
-                    <DropdownItem key={option.uid} className="capitalize">
-                      {capitalize(option.name)}
-                    </DropdownItem>
-                  ))}
-                </DropdownMenu>
-              </Dropdown>
-            ))}
+            {renderDropdowns}
             {searchable && (<Input
               isClearable
               classNames={{
@@ -273,7 +346,7 @@ export default function App({ columns, data, filterOptions, searchable, customCl
         />
       </div>
     );
-  }, [selectedKeys, paginatedItems.length, page, pages, hasSearchFilter, rowsPerPage, filteredAndSortedItems.length]);
+  }, [paginatedItems.length, page, pages, hasSearchFilter, rowsPerPage, filteredAndSortedItems.length]);
 
   const classNames = React.useMemo(
     () => customClass || {
