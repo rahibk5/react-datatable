@@ -1,6 +1,6 @@
 {
   "name": "react-table-adv",
-  "version": "1.2.1",
+  "version": "1.0.5",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
