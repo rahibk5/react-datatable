@@ -46,9 +46,20 @@ interface Props {
     options: { uid: string | number; name: string }[];
   }[];
   searchable?: boolean;
+  customClass?: {
+    base? : [],
+    wrapper? : [],
+    table? : [],
+    thead? : [],
+    tbody? : [],
+    tr? : [],
+    th? : [],
+    td? : [],
+  };
+
 }
 
-export default function App({ columns, data, filterOptions, searchable }: Props) {
+export default function App({ columns, data, filterOptions, searchable, customClass }: Props) {
   type Model = typeof data[0];
 
   const [filterValue, setFilterValue] = React.useState("");
@@ -138,42 +149,6 @@ export default function App({ columns, data, filterOptions, searchable }: Props)
       case "index":
       case column.isIndexColumn ? column.uid : undefined:
         return item.index;
-      case "name":
-        return cellValue;
-      case "role":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
-          </div>
-        );
-      case "status":
-        return (
-          <Chip
-            className="capitalize border-none gap-1 text-default-600"
-            color={statusColorMap[item.status]}
-            size="sm"
-            variant="dot"
-          >
-            {cellValue}
-          </Chip>
-        );
-      case "actions":
-        return (
-          <div className="relative flex justify-end items-center gap-2">
-            <Dropdown className="bg-background border-1 border-default-200">
-              <DropdownTrigger>
-                <Button isIconOnly radius="full" size="sm" variant="light">
-                  <VerticalDotsIcon className="text-default-400" />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem>View</DropdownItem>
-                <DropdownItem>Edit</DropdownItem>
-                <DropdownItem>Delete</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-        );
       default:
         return cellValue;
     }
@@ -298,7 +273,7 @@ export default function App({ columns, data, filterOptions, searchable }: Props)
   }, [selectedKeys, paginatedItems.length, page, pages, hasSearchFilter, rowsPerPage, filteredAndSortedItems.length]);
 
   const classNames = React.useMemo(
-    () => ({
+    () => customClass || {
       th: ["bg-transparent", "text-default-500", "border-b", "border-divider"],
       td: [
         "group-data-[first=true]:bg-default-100",
@@ -307,9 +282,11 @@ export default function App({ columns, data, filterOptions, searchable }: Props)
         "border-b",
         "border-divider",
       ],
-    }),
-    []
+    },
+    [customClass]
   );
+
+  
 
   return (
     <div className="w-full flex flex-col">
@@ -332,7 +309,7 @@ export default function App({ columns, data, filterOptions, searchable }: Props)
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No users found"} items={paginatedItems}>
+        <TableBody emptyContent={"No Data Found"} items={paginatedItems}>
           {(item: Model) => (
             <TableRow key={item.id}>
               {(columnKey) => <TableCell>{renderCell(item, columnKey.toString())}</TableCell>}

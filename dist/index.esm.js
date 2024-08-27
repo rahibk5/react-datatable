@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dropdown, DropdownTrigger, Button, DropdownMenu, DropdownItem, Chip, Input, Pagination, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from '@nextui-org/react';
+import { Dropdown, DropdownTrigger, Button, DropdownMenu, DropdownItem, Input, Pagination, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from '@nextui-org/react';
 
 var jsxRuntime = {exports: {}};
 
@@ -1403,11 +1403,6 @@ typeof SuppressedError === "function" ? SuppressedError : function (error, suppr
     return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 };
 
-const VerticalDotsIcon = (_a) => {
-    var { size = 24, width, height } = _a, props = __rest(_a, ["size", "width", "height"]);
-    return (jsxRuntimeExports.jsx("svg", Object.assign({ "aria-hidden": "true", fill: "none", focusable: "false", height: size || height, role: "presentation", viewBox: "0 0 24 24", width: size || width }, props, { children: jsxRuntimeExports.jsx("path", { d: "M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z", fill: "currentColor" }) })));
-};
-
 const ChevronDownIcon = (_a) => {
     var { strokeWidth = 1.5 } = _a, otherProps = __rest(_a, ["strokeWidth"]);
     return (jsxRuntimeExports.jsx("svg", Object.assign({ "aria-hidden": "true", fill: "none", focusable: "false", height: "1em", role: "presentation", viewBox: "0 0 24 24", width: "1em" }, otherProps, { children: jsxRuntimeExports.jsx("path", { d: "m19.92 8.95-6.52 6.52c-.77.77-2.03.77-2.8 0L4.08 8.95", stroke: "currentColor", strokeLinecap: "round", strokeLinejoin: "round", strokeMiterlimit: 10, strokeWidth: strokeWidth }) })));
@@ -1419,13 +1414,8 @@ function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-const statusColorMap = {
-    active: "success",
-    paused: "danger",
-    vacation: "warning",
-};
 const INITIAL_VISIBLE_COLUMNS = ["index", "name", "role", "status", "actions"];
-function App({ columns, data, filterOptions, searchable }) {
+function App({ columns, data, filterOptions, searchable, customClass }) {
     const [filterValue, setFilterValue] = React.useState("");
     const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
     const [visibleColumns, setVisibleColumns] = React.useState(new Set(INITIAL_VISIBLE_COLUMNS));
@@ -1486,14 +1476,6 @@ function App({ columns, data, filterOptions, searchable }) {
             case "index":
             case column.isIndexColumn ? column.uid : undefined:
                 return item.index;
-            case "name":
-                return cellValue;
-            case "role":
-                return (jsxRuntimeExports.jsx("div", { className: "flex flex-col", children: jsxRuntimeExports.jsx("p", { className: "text-bold text-small capitalize", children: cellValue }) }));
-            case "status":
-                return (jsxRuntimeExports.jsx(Chip, { className: "capitalize border-none gap-1 text-default-600", color: statusColorMap[item.status], size: "sm", variant: "dot", children: cellValue }));
-            case "actions":
-                return (jsxRuntimeExports.jsx("div", { className: "relative flex justify-end items-center gap-2", children: jsxRuntimeExports.jsxs(Dropdown, { className: "bg-background border-1 border-default-200", children: [jsxRuntimeExports.jsx(DropdownTrigger, { children: jsxRuntimeExports.jsx(Button, { isIconOnly: true, radius: "full", size: "sm", variant: "light", children: jsxRuntimeExports.jsx(VerticalDotsIcon, { className: "text-default-400" }) }) }), jsxRuntimeExports.jsxs(DropdownMenu, { children: [jsxRuntimeExports.jsx(DropdownItem, { children: "View" }), jsxRuntimeExports.jsx(DropdownItem, { children: "Edit" }), jsxRuntimeExports.jsx(DropdownItem, { children: "Delete" })] })] }) }));
             default:
                 return cellValue;
         }
@@ -1536,7 +1518,7 @@ function App({ columns, data, filterOptions, searchable }) {
                         cursor: "bg-foreground text-background",
                     }, color: "default", page: page, total: pages, variant: "light", onChange: setPage })] }));
     }, [selectedKeys, paginatedItems.length, page, pages, hasSearchFilter, rowsPerPage, filteredAndSortedItems.length]);
-    const classNames = React.useMemo(() => ({
+    const classNames = React.useMemo(() => customClass || {
         th: ["bg-transparent", "text-default-500", "border-b", "border-divider"],
         td: [
             "group-data-[first=true]:bg-default-100",
@@ -1545,8 +1527,8 @@ function App({ columns, data, filterOptions, searchable }) {
             "border-b",
             "border-divider",
         ],
-    }), []);
-    return (jsxRuntimeExports.jsx("div", { className: "w-full flex flex-col", children: jsxRuntimeExports.jsxs(Table, { "aria-label": "Example table with client side sorting", bottomContent: bottomContent, classNames: classNames, sortDescriptor: sortDescriptor, topContent: topContent, onSortChange: setSortDescriptor, children: [jsxRuntimeExports.jsx(TableHeader, { columns: headerColumns, children: (column) => (jsxRuntimeExports.jsx(TableColumn, { align: column.uid === "actions" ? "center" : "start", allowsSorting: column.sortable, children: column.name }, column.uid)) }), jsxRuntimeExports.jsx(TableBody, { emptyContent: "No users found", items: paginatedItems, children: (item) => (jsxRuntimeExports.jsx(TableRow, { children: (columnKey) => jsxRuntimeExports.jsx(TableCell, { children: renderCell(item, columnKey.toString()) }) }, item.id)) })] }) }));
+    }, [customClass]);
+    return (jsxRuntimeExports.jsx("div", { className: "w-full flex flex-col", children: jsxRuntimeExports.jsxs(Table, { "aria-label": "Example table with client side sorting", bottomContent: bottomContent, classNames: classNames, sortDescriptor: sortDescriptor, topContent: topContent, onSortChange: setSortDescriptor, children: [jsxRuntimeExports.jsx(TableHeader, { columns: headerColumns, children: (column) => (jsxRuntimeExports.jsx(TableColumn, { align: column.uid === "actions" ? "center" : "start", allowsSorting: column.sortable, children: column.name }, column.uid)) }), jsxRuntimeExports.jsx(TableBody, { emptyContent: "No Data Found", items: paginatedItems, children: (item) => (jsxRuntimeExports.jsx(TableRow, { children: (columnKey) => jsxRuntimeExports.jsx(TableCell, { children: renderCell(item, columnKey.toString()) }) }, item.id)) })] }) }));
 }
 
 export { App as Table };

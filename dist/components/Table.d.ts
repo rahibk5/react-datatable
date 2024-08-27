@@ -17,6 +17,16 @@ interface Props {
         }[];
     }[];
     searchable?: boolean;
+    customClass?: {
+        base?: [];
+        wrapper?: [];
+        table?: [];
+        thead?: [];
+        tbody?: [];
+        tr?: [];
+        th?: [];
+        td?: [];
+    };
 }
-export default function App({ columns, data, filterOptions, searchable }: Props): import("react/jsx-runtime").JSX.Element;
+export default function App({ columns, data, filterOptions, searchable, customClass }: Props): import("react/jsx-runtime").JSX.Element;
 export {};
