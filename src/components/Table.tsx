@@ -43,6 +43,7 @@ interface Props {
   filterOptions?: {
     uid: string;
     name: string;
+    selectMode: "single" | "multiple";
     options: { uid: string | number; name: string }[];
   }[];
   searchable?: boolean;
@@ -66,7 +67,7 @@ export default function App({ columns, data, filterOptions, searchable, customCl
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
   const [filters, setFilters] = React.useState<{ [key: string]: Selection }>({});
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({ column: "index", direction: "ascending" });
   const [page, setPage] = React.useState(1);
 
@@ -179,9 +180,10 @@ export default function App({ columns, data, filterOptions, searchable, customCl
                 onChange={onRowsPerPageChange}
                 value={rowsPerPage} // Ensure the dropdown reflects the current state
               >
-                <option value="5">5</option>
                 <option value="10">10</option>
                 <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
               </select>
               entries per page
             </label>
@@ -194,7 +196,7 @@ export default function App({ columns, data, filterOptions, searchable, customCl
                     endContent={<ChevronDownIcon className="text-small" />}
                     size="sm"
                     variant="flat"
-                    className="min-w-min"
+                    className="min-w-min rounded px-4 py-2"
                   >
                     {filter.name}
                   </Button>
@@ -204,8 +206,9 @@ export default function App({ columns, data, filterOptions, searchable, customCl
                   aria-label="Table Columns"
                   closeOnSelect={false}
                   selectedKeys={filters[filter.uid] || new Set()}
-                  selectionMode="multiple"
+                  selectionMode={filter?.selectMode || "single"}
                   onSelectionChange={(selection) => updateFilter(filter.uid, selection)}
+                  className="bg-white dark:bg-[#122031] rounded shadow"
                 >
                   {filter.options.map((option) => (
                     <DropdownItem key={option.uid} className="capitalize">

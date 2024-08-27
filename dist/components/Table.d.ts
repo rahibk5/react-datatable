@@ -11,6 +11,7 @@ interface Props {
     filterOptions?: {
         uid: string;
         name: string;
+        selectMode: "single" | "multiple";
         options: {
             uid: string | number;
             name: string;
