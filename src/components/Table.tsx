@@ -268,7 +268,7 @@ export default function App({ columns, data, filterOptions, searchable, customCl
           label="" 
           classNames={{
             base: "w-max bg-white dark:bg-[#122031]",
-            listboxWrapper: "max-h-[320px] bg-white dark:bg-[#122031] rounded shadow scrollbar-hide",
+            listboxWrapper: "max-h-[215px] bg-white dark:bg-[#122031] rounded shadow scrollbar-hide",
             selectorButton: "text-default-500"
           }}
           placeholder={filter.name}
