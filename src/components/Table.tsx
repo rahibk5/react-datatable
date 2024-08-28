@@ -209,21 +209,14 @@ export default function App({ columns, data, filterOptions, searchable, customCl
     }
   }, []);
 
-  const [isFocused, setIsFocused] = useState(false);
-  const [inputValue, setInputValue] = useState('');
-
-  const hasValue = inputValue.length > 0;
   const renderDropdowns = React.useMemo(() => {
     return processedFilterOptions?.map((filter: any) => (
       filter.searchable ? (
         <div className="f-search-container relative">
           <Autocomplete 
           label={filter.name}
+          placeholder={filter.name}
           className="min-w-min rounded px-3 py-2" 
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          onChange={(e) => setInputValue(e.target.value)}
-          value={inputValue}
         >
           {filteredOptions(filter).map((option: any) => (
             <AutocompleteItem key={option.uid} value={option.uid} className="bg-white dark:bg-[#122031] rounded shadow">
@@ -231,13 +224,6 @@ export default function App({ columns, data, filterOptions, searchable, customCl
             </AutocompleteItem>
           ))}
         </Autocomplete>
-        <label 
-        className={`absolute left-3 top-1/2 transform -translate-y-1/2 transition-all duration-200 ease-in-out ${
-          isFocused || hasValue ? 'text-xs top-1 left-2' : 'text-sm'
-        }`}
-      >
-        {filter.name}
-      </label>
       </div>
       ) :
       

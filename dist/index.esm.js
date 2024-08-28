@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Autocomplete, AutocompleteItem, Dropdown, DropdownTrigger, Button, DropdownMenu, DropdownItem, Input, Pagination, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from '@nextui-org/react';
 
 var jsxRuntime = {exports: {}};
@@ -1522,11 +1522,8 @@ function App({ columns, data, filterOptions, searchable, customClass }) {
             setFilterValue("");
         }
     }, []);
-    const [isFocused, setIsFocused] = useState(false);
-    const [inputValue, setInputValue] = useState('');
-    const hasValue = inputValue.length > 0;
     const renderDropdowns = React.useMemo(() => {
-        return processedFilterOptions === null || processedFilterOptions === void 0 ? void 0 : processedFilterOptions.map((filter) => (filter.searchable ? (jsxRuntimeExports.jsxs("div", { className: "f-search-container relative", children: [jsxRuntimeExports.jsx(Autocomplete, { label: filter.name, className: "min-w-min rounded px-3 py-2", onFocus: () => setIsFocused(true), onBlur: () => setIsFocused(false), onChange: (e) => setInputValue(e.target.value), value: inputValue, children: filteredOptions(filter).map((option) => (jsxRuntimeExports.jsx(AutocompleteItem, { value: option.uid, className: "bg-white dark:bg-[#122031] rounded shadow", children: option.name }, option.uid))) }), jsxRuntimeExports.jsx("label", { className: `absolute left-3 top-1/2 transform -translate-y-1/2 transition-all duration-200 ease-in-out ${isFocused || hasValue ? 'text-xs top-1 left-2' : 'text-sm'}`, children: filter.name })] })) :
+        return processedFilterOptions === null || processedFilterOptions === void 0 ? void 0 : processedFilterOptions.map((filter) => (filter.searchable ? (jsxRuntimeExports.jsx("div", { className: "f-search-container relative", children: jsxRuntimeExports.jsx(Autocomplete, { label: filter.name, placeholder: filter.name, className: "min-w-min rounded px-3 py-2", children: filteredOptions(filter).map((option) => (jsxRuntimeExports.jsx(AutocompleteItem, { value: option.uid, className: "bg-white dark:bg-[#122031] rounded shadow", children: option.name }, option.uid))) }) })) :
             (jsxRuntimeExports.jsx("div", { className: "f-dropdown-container", children: jsxRuntimeExports.jsxs(Dropdown, { children: [jsxRuntimeExports.jsx(DropdownTrigger, { className: "hidden sm:flex", children: jsxRuntimeExports.jsx(Button, { endContent: jsxRuntimeExports.jsx(ChevronDownIcon, { className: "text-small" }), size: "sm", variant: "flat", className: "min-w-min rounded px-3 py-2", children: filter.name }) }), jsxRuntimeExports.jsx(DropdownMenu, { disallowEmptySelection: false, "aria-label": "Table Columns", closeOnSelect: false, selectedKeys: filters[filter.uid] || new Set(), selectionMode: (filter === null || filter === void 0 ? void 0 : filter.selectMode) || "single", onSelectionChange: (selection) => updateFilter(filter.uid, selection), className: "bg-white dark:bg-[#122031] rounded shadow max-h-64 overflow-y-auto", children: filteredOptions(filter).map((option) => (jsxRuntimeExports.jsx(DropdownItem, { className: "capitalize", children: capitalize(option.name) }, option.uid))) })] }, filter.uid) }))));
     }, [filterOptions, filters, filterSearch]);
     const topContent = React.useMemo(() => {
