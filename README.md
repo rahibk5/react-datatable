@@ -99,10 +99,17 @@ export default App;
     {
       uid: "role",
       name: "Role",
+      selectMode: "single",
+      searchable: true, // only in single mode
       options: [
         { name: "Admin", uid: "Admin" },
         { name: "User", uid: "User" },
       ],
+      onChange: (filterUid: any, selection: any, filteredData: any) => {
+        console.log(`Filter ${filterUid} changed to ${selection}`);
+        console.log('Filtered data:', filteredData);
+        // Perform additional actions with filteredData if needed
+      },
     },
   ];
   ........
@@ -111,7 +118,7 @@ export default App;
     
   <Table columns={columns} data={data} filterOptions={filterOptions}/>
     ```
-- `searchable` : boolean element to show/hide search field, default searchable is true so if you don't need search field just searchable={true}
+- `searchable` : boolean element to show/hide search field, default searchable is true so if you don't need search field just searchable={false}
 
 ## Examples
 
@@ -124,11 +131,35 @@ const columns = [
     {
       uid:'status', 
       name:'Status', 
-      customRenderer:({item}:any) => <strong>Active</strong>
+      customRenderer:(item:any) => <strong>Active</strong>
     },
   ];
   // Add more customized columns
-];
+```
+
+
+## Custom Style
+
+### Customizing Table Style
+
+```jsx
+const classNames = {
+      wrapper: ["max-h-[382px]", "max-w-3xl"],
+      th: ["bg-red-500", "text-default-500", "border-b", "border-divider"],
+      td: [
+        "group-data-[first=true]:bg-default-100",
+        "text-small",
+        "cursor-pointer",
+        "border-b",
+        "border-divider",
+      ],
+      // more props: base, table, thead, tbody, tr
+    }
+
+    // and pass in table
+    
+    <Table data={data} columns={columns} filterOptions={filterOptions} customClass={classNames}/>
+    
 ```
 
 ## Acknowledgments

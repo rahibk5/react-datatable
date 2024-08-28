@@ -1459,7 +1459,7 @@ function App({ columns, data, filterOptions, searchable, customClass }) {
         return filter.options.filter(option => option.name.toLowerCase().includes(filterSearch[filter.uid].toLowerCase()));
     };
     const updateFilter = (filterUid, selection) => {
-        console.log(filterUid, selection);
+        var _a;
         if (!selection || selection === "all" || selection.size === 0) {
             // When no selection is made, show all items by clearing the filter for this UID
             setFilters((prevFilters) => (Object.assign(Object.assign({}, prevFilters), { [filterUid]: new Set() })));
@@ -1467,6 +1467,32 @@ function App({ columns, data, filterOptions, searchable, customClass }) {
         else {
             setFilters((prevFilters) => (Object.assign(Object.assign({}, prevFilters), { [filterUid]: selection })));
         }
+        // Call the onChange callback if it exists
+        const filteredData = getFilteredData();
+        const filterOption = filterOptions === null || filterOptions === void 0 ? void 0 : filterOptions.find(option => option.uid === filterUid);
+        (_a = filterOption === null || filterOption === void 0 ? void 0 : filterOption.onChange) === null || _a === void 0 ? void 0 : _a.call(filterOption, filterUid, selection, filteredData);
+    };
+    const getFilteredData = () => {
+        let filteredData = [...data];
+        if (hasSearchFilter) {
+            filteredData = filteredData.filter((item) => Object.values(item).some(value => typeof value === 'string' && value.toLowerCase().includes(filterValue.toLowerCase())));
+        }
+        if (filterOptions) {
+            filterOptions.forEach((filterOption) => {
+                const filterValue = filters[filterOption.uid];
+                if (filterValue && filterValue !== "all") {
+                    if (typeof filterValue === 'string') {
+                        filteredData = filteredData.filter((item) => item[filterOption.uid].toLowerCase() === filterValue.toLowerCase());
+                    }
+                    else {
+                        if (filterValue instanceof Set && filterValue.size > 0) {
+                            filteredData = filteredData.filter((item) => Array.from(filterValue).includes(item[filterOption.uid]));
+                        }
+                    }
+                }
+            });
+        }
+        return filteredData;
     };
     const filteredAndSortedItems = React.useMemo(() => {
         let filteredData = [...data];
@@ -1476,7 +1502,6 @@ function App({ columns, data, filterOptions, searchable, customClass }) {
         if (filterOptions) {
             filterOptions.forEach((filterOption) => {
                 const filterValue = filters[filterOption.uid];
-                console.log("filterValue", typeof filterValue);
                 if (filterValue && filterValue !== "all") {
                     if (typeof filterValue === 'string') {
                         filteredData = filteredData.filter((item) => item[filterOption.uid].toLowerCase() === filterValue.toLowerCase());

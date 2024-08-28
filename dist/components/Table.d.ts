@@ -1,4 +1,5 @@
 import React from "react";
+import { Selection } from "@nextui-org/react";
 import "../global.css";
 interface Props {
     columns: {
@@ -19,6 +20,7 @@ interface Props {
             uid: string | number;
             name: string;
         }[];
+        onChange?: (filterUid: string, selection: Selection, filteredData: any[]) => void;
     }[];
     searchable?: boolean;
     customClass?: {

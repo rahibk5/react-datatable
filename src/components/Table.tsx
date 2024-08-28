@@ -50,6 +50,7 @@ interface Props {
     selectMode: "single" | "multiple";
     selectedKeys?: any[];
     options: { uid: string | number; name: string }[];
+    onChange?: (filterUid: string, selection: Selection, filteredData: any[]) => void;
   }[];
   searchable?: boolean;
   customClass?: {
@@ -120,8 +121,6 @@ export default function App({ columns, data, filterOptions, searchable, customCl
   };
 
   const updateFilter = (filterUid: string, selection: Selection) => {
-    console.log(filterUid, selection);
-    
     if (!selection || selection === "all" || selection.size === 0) {
       // When no selection is made, show all items by clearing the filter for this UID
       setFilters((prevFilters) => ({
@@ -134,7 +133,46 @@ export default function App({ columns, data, filterOptions, searchable, customCl
         [filterUid]: selection,
       }));
     }
+
+    // Call the onChange callback if it exists
+    const filteredData = getFilteredData();
+
+    const filterOption = filterOptions?.find(option => option.uid === filterUid);
+    filterOption?.onChange?.(filterUid, selection, filteredData);
   };
+
+  const getFilteredData = () => {
+    let filteredData = [...data];
+
+    if (hasSearchFilter) {
+        filteredData = filteredData.filter((item) =>
+            Object.values(item).some(value =>
+                typeof value === 'string' && value.toLowerCase().includes(filterValue.toLowerCase())
+            )
+        );
+    }
+
+    if (filterOptions) {
+        filterOptions.forEach((filterOption) => {
+            const filterValue = filters[filterOption.uid];
+            
+            if (filterValue && filterValue !== "all") {
+                if (typeof filterValue === 'string') {
+                    filteredData = filteredData.filter((item) =>
+                        (item[filterOption.uid] as string).toLowerCase() === (filterValue as string).toLowerCase()
+                    );
+                } else {
+                    if (filterValue instanceof Set && filterValue.size > 0) {
+                        filteredData = filteredData.filter((item) =>
+                            Array.from(filterValue).includes(item[filterOption.uid])
+                        ); 
+                    }
+                }
+            }
+        });
+    }
+    return filteredData;
+};
 
   const filteredAndSortedItems = React.useMemo(() => {
     let filteredData = [...data];
@@ -150,8 +188,7 @@ export default function App({ columns, data, filterOptions, searchable, customCl
     if (filterOptions) {
       filterOptions.forEach((filterOption) => {
         const filterValue = filters[filterOption.uid];
-        console.log("filterValue",  typeof  filterValue);
-        
+     
         if (filterValue && filterValue !== "all") {
           if(typeof  filterValue === 'string') {
             filteredData = filteredData.filter((item) =>
