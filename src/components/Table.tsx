@@ -217,12 +217,12 @@ export default function App({ columns, data, filterOptions, searchable, customCl
           key={filter.uid}
           label="" 
           classNames={{
-            base: "max-w-xs",
+            base: "w-max bg-white dark:bg-[#122031] shadow",
             listboxWrapper: "max-h-[320px]",
             selectorButton: "text-default-500"
           }}
           placeholder={filter.name}
-          className="max-w-xs rounded px-3 py-2 bg-white dark:bg-[#122031]"  
+          className="rounded px-3 py-2 bg-white dark:bg-[#122031]"  
         >
           {filteredOptions(filter).map((option: any) => (
             <AutocompleteItem key={option.uid} value={option.uid} className="bg-white dark:bg-[#122031]">

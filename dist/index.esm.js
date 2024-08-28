@@ -1524,10 +1524,10 @@ function App({ columns, data, filterOptions, searchable, customClass }) {
     }, []);
     const renderDropdowns = React.useMemo(() => {
         return processedFilterOptions === null || processedFilterOptions === void 0 ? void 0 : processedFilterOptions.map((filter) => (filter.searchable ? (jsxRuntimeExports.jsx("div", { className: "f-search-container", children: jsxRuntimeExports.jsx(Autocomplete, { label: "", classNames: {
-                    base: "max-w-xs",
+                    base: "w-max bg-white dark:bg-[#122031] shadow",
                     listboxWrapper: "max-h-[320px]",
                     selectorButton: "text-default-500"
-                }, placeholder: filter.name, className: "max-w-xs rounded px-3 py-2 bg-white dark:bg-[#122031]", children: filteredOptions(filter).map((option) => (jsxRuntimeExports.jsx(AutocompleteItem, { value: option.uid, className: "bg-white dark:bg-[#122031]", children: option.name }, option.uid))) }, filter.uid) })) :
+                }, placeholder: filter.name, className: "rounded px-3 py-2 bg-white dark:bg-[#122031]", children: filteredOptions(filter).map((option) => (jsxRuntimeExports.jsx(AutocompleteItem, { value: option.uid, className: "bg-white dark:bg-[#122031]", children: option.name }, option.uid))) }, filter.uid) })) :
             (jsxRuntimeExports.jsx("div", { className: "f-dropdown-container", children: jsxRuntimeExports.jsxs(Dropdown, { children: [jsxRuntimeExports.jsx(DropdownTrigger, { className: "hidden sm:flex", children: jsxRuntimeExports.jsx(Button, { endContent: jsxRuntimeExports.jsx(ChevronDownIcon, { className: "text-small" }), size: "sm", variant: "flat", className: "min-w-min rounded px-3 py-2", children: filter.name }) }), jsxRuntimeExports.jsx(DropdownMenu, { disallowEmptySelection: false, "aria-label": "Table Columns", closeOnSelect: false, selectedKeys: filters[filter.uid] || new Set(), selectionMode: (filter === null || filter === void 0 ? void 0 : filter.selectMode) || "single", onSelectionChange: (selection) => updateFilter(filter.uid, selection), className: "bg-white dark:bg-[#122031] rounded shadow max-h-64 overflow-y-auto", children: filteredOptions(filter).map((option) => (jsxRuntimeExports.jsx(DropdownItem, { className: "capitalize", children: capitalize(option.name) }, option.uid))) })] }, filter.uid) }))));
     }, [filterOptions, filters, filterSearch]);
     const topContent = React.useMemo(() => {
