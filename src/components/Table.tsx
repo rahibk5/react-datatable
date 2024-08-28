@@ -215,10 +215,10 @@ export default function App({ columns, data, filterOptions, searchable, customCl
       filter.searchable ? (
         <Autocomplete 
         label={filter.name}
-        className="max-w-xs" 
+        className="min-w-min rounded px-3 py-2" 
       >
         {filteredOptions(filter).map((option: any) => (
-          <AutocompleteItem key={option.uid} value={option.uid}>
+          <AutocompleteItem key={option.uid} value={option.uid} className="bg-white dark:bg-[#122031] rounded shadow">
             {option.name}
           </AutocompleteItem>
         ))}
