@@ -217,7 +217,7 @@ export default function App({ columns, data, filterOptions, searchable, customCl
           key={filter.uid}
           label="" 
           placeholder={filter.name}
-          className="min-w-min rounded px-3 py-2 bg-white dark:bg-[#122031] "  
+          className="rounded px-3 py-2 bg-white dark:bg-[#122031] w-max"  
         >
           {filteredOptions(filter).map((option: any) => (
             <AutocompleteItem key={option.uid} value={option.uid} className="bg-white dark:bg-[#122031]">
@@ -287,7 +287,7 @@ export default function App({ columns, data, filterOptions, searchable, customCl
             {searchable && (<Input
               isClearable
               classNames={{
-                base: "w-full",
+                base: "max-w-[200px]",
                 inputWrapper: "border-1",
               }}
               placeholder="Search..."
