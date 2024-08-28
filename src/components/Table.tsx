@@ -218,14 +218,19 @@ export default function App({ columns, data, filterOptions, searchable, customCl
           label="" 
           classNames={{
             base: "w-max bg-white dark:bg-[#122031]",
-            listboxWrapper: "max-h-[320px] w-max bg-white dark:bg-[#122031] rounded shadow",
+            listboxWrapper: "max-h-[320px] bg-white dark:bg-[#122031] rounded shadow",
             selectorButton: "text-default-500"
           }}
           placeholder={filter.name}
           className="rounded px-3 py-2 bg-white dark:bg-[#122031]"  
+          onSelectionChange={(selection: any) => updateFilter(filter.uid, selection)}
         >
           {filteredOptions(filter).map((option: any) => (
-            <AutocompleteItem key={option.uid} value={option.uid} className="bg-white dark:bg-[#122031]">
+            <AutocompleteItem 
+            key={option.uid} 
+            value={option.uid} 
+            className="bg-white dark:bg-[#122031]"
+            >
               {option.name}
             </AutocompleteItem>
           ))}
