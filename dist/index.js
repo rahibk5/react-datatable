@@ -1565,7 +1565,7 @@ function App({ columns, data, filterOptions, searchable, customClass }) {
     const topContent = React.useMemo(() => {
         return (jsxRuntimeExports.jsx("div", { className: "flex flex-col gap-4", children: jsxRuntimeExports.jsxs("div", { className: "flex justify-between gap-3 items-end", children: [jsxRuntimeExports.jsx("div", { className: "flex justify-between items-center", children: jsxRuntimeExports.jsxs("label", { className: "flex items-center text-default-400 text-small", children: [jsxRuntimeExports.jsxs("select", { className: "bg-transparent outline-none text-default-400 text-small border border-gray-200 p-1 rounded-lg mr-2", onChange: onRowsPerPageChange, value: rowsPerPage, children: [jsxRuntimeExports.jsx("option", { value: "10", children: "10" }), jsxRuntimeExports.jsx("option", { value: "15", children: "15" }), jsxRuntimeExports.jsx("option", { value: "20", children: "20" }), jsxRuntimeExports.jsx("option", { value: "25", children: "25" })] }), "entries per page"] }) }), jsxRuntimeExports.jsxs("div", { className: "flex gap-3", children: [renderDropdowns, searchable && (jsxRuntimeExports.jsx(react.Input, { isClearable: true, classNames: {
                                     base: "max-w-[215px]",
-                                    inputWrapper: "border-1 p-[40px]",
+                                    inputWrapper: "border-1 p-[20px]",
                                 }, placeholder: "Search...", size: "sm", startContent: jsxRuntimeExports.jsx(SearchIcon, { className: "text-default-300" }), value: filterValue, variant: "bordered", onClear: () => setFilterValue(""), onValueChange: onSearchChange }))] })] }) }));
     }, [
         filterValue,
@@ -1590,13 +1590,12 @@ function App({ columns, data, filterOptions, searchable, customClass }) {
     const classNames = React.useMemo(() => customClass || {
         th: ["bg-transparent", "text-default-500", "border-b", "border-divider"],
         td: [
-            "group-data-[first=true]:bg-default-100",
             "text-small",
             "cursor-pointer",
             "border-b",
             "border-divider",
         ],
-    }, [customClass]);
+    }, []);
     return (jsxRuntimeExports.jsx("div", { className: "w-full flex flex-col", children: jsxRuntimeExports.jsxs(react.Table, { "aria-label": "Example table with client side sorting", bottomContent: bottomContent, classNames: classNames, sortDescriptor: sortDescriptor, topContent: topContent, onSortChange: setSortDescriptor, children: [jsxRuntimeExports.jsx(react.TableHeader, { columns: headerColumns, children: (column) => (jsxRuntimeExports.jsx(react.TableColumn, { align: column.uid === "actions" ? "center" : "start", allowsSorting: column.sortable, children: column.name }, column.uid)) }), jsxRuntimeExports.jsx(react.TableBody, { emptyContent: "No Data Found", items: paginatedItems, children: (item) => (jsxRuntimeExports.jsx(react.TableRow, { children: (columnKey) => jsxRuntimeExports.jsx(react.TableCell, { children: renderCell(item, columnKey.toString()) }) }, item.id)) })] }) }));
 }
 

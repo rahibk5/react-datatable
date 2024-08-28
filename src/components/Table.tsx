@@ -342,7 +342,7 @@ export default function App({ columns, data, filterOptions, searchable, customCl
               isClearable
               classNames={{
                 base: "max-w-[215px]",
-                inputWrapper: "border-1 p-[40px]",
+                inputWrapper: "border-1 p-[20px]",
               }}
               placeholder="Search..."
               size="sm"
@@ -399,14 +399,13 @@ export default function App({ columns, data, filterOptions, searchable, customCl
     () => customClass || {
       th: ["bg-transparent", "text-default-500", "border-b", "border-divider"],
       td: [
-        "group-data-[first=true]:bg-default-100",
         "text-small",
         "cursor-pointer",
         "border-b",
         "border-divider",
       ],
     },
-    [customClass]
+    []
   );
 
   
