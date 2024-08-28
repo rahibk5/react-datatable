@@ -403,7 +403,7 @@ export default function App({ columns, data, filterOptions, searchable, customCl
       thead: customClass?.thead,
       tbody: customClass?.tbody,
       tr: customClass?.tr,
-      th: customClass?.th || ["bg-gray-100 dark:bg-dark-3", "text-default-500", "border-b", "border-divider", "p-5"],
+      th: customClass?.th || ["bg-gray-100 dark:bg-dark-3", "text-default-500", "border-none", "border-divider", "p-5"],
       td: customClass?.td || [
        "text-default-700", "border-none", "border-divider", "p-5"
       ],
