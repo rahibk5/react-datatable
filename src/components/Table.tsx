@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableHeader,
@@ -209,14 +209,21 @@ export default function App({ columns, data, filterOptions, searchable, customCl
     }
   }, []);
 
+  const [isFocused, setIsFocused] = useState(false);
+  const [inputValue, setInputValue] = useState('');
 
+  const hasValue = inputValue.length > 0;
   const renderDropdowns = React.useMemo(() => {
     return processedFilterOptions?.map((filter: any) => (
       filter.searchable ? (
-        <div className="f-search-container">
+        <div className="f-search-container relative">
           <Autocomplete 
           label={filter.name}
           className="min-w-min rounded px-3 py-2" 
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          onChange={(e) => setInputValue(e.target.value)}
+          value={inputValue}
         >
           {filteredOptions(filter).map((option: any) => (
             <AutocompleteItem key={option.uid} value={option.uid} className="bg-white dark:bg-[#122031] rounded shadow">
@@ -224,6 +231,13 @@ export default function App({ columns, data, filterOptions, searchable, customCl
             </AutocompleteItem>
           ))}
         </Autocomplete>
+        <label 
+        className={`absolute left-3 top-1/2 transform -translate-y-1/2 transition-all duration-200 ease-in-out ${
+          isFocused || hasValue ? 'text-xs top-1 left-2' : 'text-sm'
+        }`}
+      >
+        {filter.name}
+      </label>
       </div>
       ) :
       
@@ -247,20 +261,8 @@ export default function App({ columns, data, filterOptions, searchable, customCl
           selectedKeys={filters[filter.uid] || new Set()}
           selectionMode={filter?.selectMode || "single"}
           onSelectionChange={(selection) => updateFilter(filter.uid, selection)}
-          className="bg-white dark:bg-[#122031] rounded shadow"
+          className="bg-white dark:bg-[#122031] rounded shadow max-h-64 overflow-y-auto"
         >
-          {filter.searchable && (
-            <DropdownItem key="search" className="p-2">
-              <Input
-                isClearable
-                placeholder={`Search ${filter.name}...`}
-                size="sm"
-                value={filterSearch[filter.uid] || ""}
-                onClear={() => setFilterSearch({ ...filterSearch, [filter.uid]: "" })}
-                onValueChange={(value) => setFilterSearch({ ...filterSearch, [filter.uid]: value })}
-              />
-            </DropdownItem>
-          )}
           {filteredOptions(filter).map((option) => (
             <DropdownItem key={option.uid} className="capitalize">
               {capitalize(option.name)}
