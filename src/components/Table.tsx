@@ -215,7 +215,7 @@ export default function App({ columns, data, filterOptions, searchable, customCl
       filter.searchable ? (
         <Autocomplete 
         label={filter.name}
-        className="min-w-min rounded px-3 py-2" 
+        className="min-w-min rounded px-3 py-2 search-container" 
       >
         {filteredOptions(filter).map((option: any) => (
           <AutocompleteItem key={option.uid} value={option.uid} className="bg-white dark:bg-[#122031] rounded shadow">
@@ -232,7 +232,7 @@ export default function App({ columns, data, filterOptions, searchable, customCl
             endContent={<ChevronDownIcon className="text-small" />}
             size="sm"
             variant="flat"
-            className="min-w-min rounded px-3 py-2"
+            className="min-w-min rounded px-3 py-2 select-container"
           >
             {filter.name}
           </Button>
