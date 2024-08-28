@@ -214,7 +214,6 @@ export default function App({ columns, data, filterOptions, searchable, customCl
       filter.searchable ? (
         <div className="f-search-container relative">
           <Autocomplete 
-          label={filter.name}
           placeholder={filter.name}
           className="min-w-min rounded px-3 py-2" 
         >
