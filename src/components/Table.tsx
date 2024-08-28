@@ -290,7 +290,7 @@ export default function App({ columns, data, filterOptions, searchable, customCl
             endContent={<ChevronDownIcon className="text-small" />}
             size="sm"
             variant="flat"
-            className="min-w-min"
+            className="min-w-min p-[20px]"
           >
             {filter.name}
           </Button>
@@ -302,6 +302,7 @@ export default function App({ columns, data, filterOptions, searchable, customCl
           selectedKeys={filters[filter.uid] || new Set()}
           selectionMode={filter?.selectMode || "single"}
           onSelectionChange={(selection) => updateFilter(filter.uid, selection)}
+          className="max-h-64 overflow-y-auto"
         >
           {filteredOptions(filter).map((option) => (
             <DropdownItem key={option.uid} className="capitalize">
@@ -341,7 +342,7 @@ export default function App({ columns, data, filterOptions, searchable, customCl
               isClearable
               classNames={{
                 base: "max-w-[215px]",
-                inputWrapper: "border-1",
+                inputWrapper: "border-1 p-[40px]",
               }}
               placeholder="Search..."
               size="sm"
