@@ -396,16 +396,22 @@ export default function App({ columns, data, filterOptions, searchable, customCl
   }, [paginatedItems.length, page, pages, hasSearchFilter, rowsPerPage, filteredAndSortedItems.length]);
 
   const classNames = React.useMemo(
-    () => customClass || {
-      th: ["bg-transparent", "text-default-500", "border-b", "border-divider"],
-      td: [
+    () => ({
+      base: customClass?.base,
+      wrapper: customClass?.wrapper,
+      table: customClass?.table,
+      thead: customClass?.thead,
+      tbody: customClass?.tbody,
+      tr: customClass?.tr,
+      th: customClass?.th || ["bg-gray-100 dark:bg-dark-3", "text-default-500", "border-b", "border-divider"],
+      td: customClass?.td || [
         "text-small",
         "cursor-pointer",
         "border-b",
         "border-divider",
       ],
-    },
-    []
+    }),
+    [customClass]
   );
 
   

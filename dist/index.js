@@ -1587,15 +1587,21 @@ function App({ columns, data, filterOptions, searchable, customClass }) {
                         cursor: "bg-foreground text-background",
                     }, color: "default", page: page, total: pages, variant: "light", onChange: setPage })] }));
     }, [paginatedItems.length, page, pages, hasSearchFilter, rowsPerPage, filteredAndSortedItems.length]);
-    const classNames = React.useMemo(() => customClass || {
-        th: ["bg-transparent", "text-default-500", "border-b", "border-divider"],
-        td: [
+    const classNames = React.useMemo(() => ({
+        base: customClass === null || customClass === void 0 ? void 0 : customClass.base,
+        wrapper: customClass === null || customClass === void 0 ? void 0 : customClass.wrapper,
+        table: customClass === null || customClass === void 0 ? void 0 : customClass.table,
+        thead: customClass === null || customClass === void 0 ? void 0 : customClass.thead,
+        tbody: customClass === null || customClass === void 0 ? void 0 : customClass.tbody,
+        tr: customClass === null || customClass === void 0 ? void 0 : customClass.tr,
+        th: (customClass === null || customClass === void 0 ? void 0 : customClass.th) || ["bg-gray-100 dark:bg-dark-3", "text-default-500", "border-b", "border-divider"],
+        td: (customClass === null || customClass === void 0 ? void 0 : customClass.td) || [
             "text-small",
             "cursor-pointer",
             "border-b",
             "border-divider",
         ],
-    }, []);
+    }), [customClass]);
     return (jsxRuntimeExports.jsx("div", { className: "w-full flex flex-col", children: jsxRuntimeExports.jsxs(react.Table, { "aria-label": "Example table with client side sorting", bottomContent: bottomContent, classNames: classNames, sortDescriptor: sortDescriptor, topContent: topContent, onSortChange: setSortDescriptor, children: [jsxRuntimeExports.jsx(react.TableHeader, { columns: headerColumns, children: (column) => (jsxRuntimeExports.jsx(react.TableColumn, { align: column.uid === "actions" ? "center" : "start", allowsSorting: column.sortable, children: column.name }, column.uid)) }), jsxRuntimeExports.jsx(react.TableBody, { emptyContent: "No Data Found", items: paginatedItems, children: (item) => (jsxRuntimeExports.jsx(react.TableRow, { children: (columnKey) => jsxRuntimeExports.jsx(react.TableCell, { children: renderCell(item, columnKey.toString()) }) }, item.id)) })] }) }));
 }
 
