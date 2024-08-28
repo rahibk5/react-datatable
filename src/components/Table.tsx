@@ -213,26 +213,29 @@ export default function App({ columns, data, filterOptions, searchable, customCl
   const renderDropdowns = React.useMemo(() => {
     return processedFilterOptions?.map((filter: any) => (
       filter.searchable ? (
-        <Autocomplete 
-        label={filter.name}
-        className="min-w-min rounded px-3 py-2 search-container" 
-      >
-        {filteredOptions(filter).map((option: any) => (
-          <AutocompleteItem key={option.uid} value={option.uid} className="bg-white dark:bg-[#122031] rounded shadow">
-            {option.name}
-          </AutocompleteItem>
-        ))}
-      </Autocomplete>
+        <div className="f-search-container">
+          <Autocomplete 
+          label={filter.name}
+          className="min-w-min rounded px-3 py-2" 
+        >
+          {filteredOptions(filter).map((option: any) => (
+            <AutocompleteItem key={option.uid} value={option.uid} className="bg-white dark:bg-[#122031] rounded shadow">
+              {option.name}
+            </AutocompleteItem>
+          ))}
+        </Autocomplete>
+      </div>
       ) :
       
       (
+        <div className="f-dropdown-container">
         <Dropdown key={filter.uid}>
         <DropdownTrigger className="hidden sm:flex">
           <Button
             endContent={<ChevronDownIcon className="text-small" />}
             size="sm"
             variant="flat"
-            className="min-w-min rounded px-3 py-2 select-container"
+            className="min-w-min rounded px-3 py-2"
           >
             {filter.name}
           </Button>
@@ -265,6 +268,7 @@ export default function App({ columns, data, filterOptions, searchable, customCl
           ))}
         </DropdownMenu>
       </Dropdown>
+      </div>
       )
       
     ));
