@@ -266,13 +266,7 @@ export default function App({ columns, data, filterOptions, searchable, customCl
           <Autocomplete
           key={filter.uid}
           label="" 
-          classNames={{
-            base: "w-max bg-white dark:bg-[#122031]",
-            listboxWrapper: "max-h-[215px] bg-white dark:bg-[#122031] rounded shadow scrollbar-hide",
-            selectorButton: "text-default-500"
-          }}
           placeholder={filter.name}
-          className="rounded px-3 py-2 bg-white dark:bg-[#122031]"  
           onSelectionChange={(selection: any) => updateFilter(filter.uid, selection)}
           
         >
@@ -280,7 +274,6 @@ export default function App({ columns, data, filterOptions, searchable, customCl
             <AutocompleteItem 
             key={option.uid} 
             value={option.uid} 
-            className="bg-white dark:bg-[#122031]"
             >
               {option.name}
             </AutocompleteItem>
@@ -297,7 +290,7 @@ export default function App({ columns, data, filterOptions, searchable, customCl
             endContent={<ChevronDownIcon className="text-small" />}
             size="sm"
             variant="flat"
-            className="min-w-min rounded px-3 py-2"
+            className="min-w-min"
           >
             {filter.name}
           </Button>
@@ -309,7 +302,6 @@ export default function App({ columns, data, filterOptions, searchable, customCl
           selectedKeys={filters[filter.uid] || new Set()}
           selectionMode={filter?.selectMode || "single"}
           onSelectionChange={(selection) => updateFilter(filter.uid, selection)}
-          className="bg-white dark:bg-[#122031] rounded shadow max-h-64 overflow-y-auto"
         >
           {filteredOptions(filter).map((option) => (
             <DropdownItem key={option.uid} className="capitalize">
