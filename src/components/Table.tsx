@@ -24,6 +24,7 @@ import { VerticalDotsIcon } from "./icons/VerticalDotsIcon";
 import { ChevronDownIcon } from "./icons/ChevronDownIcon";
 import { SearchIcon } from "./icons/SearchIcon";
 import { capitalize } from "../utils/utils";
+import "../global.css";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -218,7 +219,7 @@ export default function App({ columns, data, filterOptions, searchable, customCl
           label="" 
           classNames={{
             base: "w-max bg-white dark:bg-[#122031]",
-            listboxWrapper: "max-h-[320px] bg-white dark:bg-[#122031] rounded shadow",
+            listboxWrapper: "max-h-[320px] bg-white dark:bg-[#122031] rounded shadow scrollbar-hide",
             selectorButton: "text-default-500"
           }}
           placeholder={filter.name}

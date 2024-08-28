@@ -1,4 +1,5 @@
 import React from "react";
+import "../global.css";
 interface Props {
     columns: {
         uid: string;
