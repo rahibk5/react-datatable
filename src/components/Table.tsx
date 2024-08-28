@@ -216,8 +216,13 @@ export default function App({ columns, data, filterOptions, searchable, customCl
           <Autocomplete
           key={filter.uid}
           label="" 
+          classNames={{
+            base: "max-w-xs",
+            listboxWrapper: "max-h-[320px]",
+            selectorButton: "text-default-500"
+          }}
           placeholder={filter.name}
-          className="rounded px-3 py-2 bg-white dark:bg-[#122031] w-max"  
+          className="max-w-xs rounded px-3 py-2 bg-white dark:bg-[#122031]"  
         >
           {filteredOptions(filter).map((option: any) => (
             <AutocompleteItem key={option.uid} value={option.uid} className="bg-white dark:bg-[#122031]">
@@ -287,7 +292,7 @@ export default function App({ columns, data, filterOptions, searchable, customCl
             {searchable && (<Input
               isClearable
               classNames={{
-                base: "max-w-[200px]",
+                base: "max-w-[215px]",
                 inputWrapper: "border-1",
               }}
               placeholder="Search..."
