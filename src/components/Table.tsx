@@ -212,13 +212,15 @@ export default function App({ columns, data, filterOptions, searchable, customCl
   const renderDropdowns = React.useMemo(() => {
     return processedFilterOptions?.map((filter: any) => (
       filter.searchable ? (
-        <div className="f-search-container relative">
-          <Autocomplete 
+        <div className="f-search-container">
+          <Autocomplete
+          key={filter.uid}
+          label="" 
           placeholder={filter.name}
-          className="min-w-min rounded px-3 py-2" 
+          className="min-w-min rounded px-3 py-2 bg-white dark:bg-[#122031] "  
         >
           {filteredOptions(filter).map((option: any) => (
-            <AutocompleteItem key={option.uid} value={option.uid} className="bg-white dark:bg-[#122031] rounded shadow">
+            <AutocompleteItem key={option.uid} value={option.uid} className="bg-white dark:bg-[#122031]">
               {option.name}
             </AutocompleteItem>
           ))}
