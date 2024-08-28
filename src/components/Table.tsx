@@ -120,6 +120,8 @@ export default function App({ columns, data, filterOptions, searchable, customCl
   };
 
   const updateFilter = (filterUid: string, selection: Selection) => {
+    console.log(filterUid, selection);
+    
     if (!selection || selection === "all" || selection.size === 0) {
       // When no selection is made, show all items by clearing the filter for this UID
       setFilters((prevFilters) => ({
@@ -148,10 +150,20 @@ export default function App({ columns, data, filterOptions, searchable, customCl
     if (filterOptions) {
       filterOptions.forEach((filterOption) => {
         const filterValue = filters[filterOption.uid];
-        if (filterValue && filterValue !== "all" && (filterValue instanceof Set && filterValue.size > 0)) {
-          filteredData = filteredData.filter((item) =>
-            Array.from(filterValue).includes(item[filterOption.uid])
-          );
+        console.log("filterValue",  typeof  filterValue);
+        
+        if (filterValue && filterValue !== "all") {
+          if(typeof  filterValue === 'string') {
+            filteredData = filteredData.filter((item) =>
+              (item[filterOption.uid] as string).toLowerCase() === (filterValue as string).toLowerCase()
+            );
+          } else {
+            if(filterValue instanceof Set && filterValue.size > 0) {
+              filteredData = filteredData.filter((item) =>
+                Array.from(filterValue).includes(item[filterOption.uid])
+              ); 
+            }
+          }
         }
       });
     }
@@ -225,6 +237,7 @@ export default function App({ columns, data, filterOptions, searchable, customCl
           placeholder={filter.name}
           className="rounded px-3 py-2 bg-white dark:bg-[#122031]"  
           onSelectionChange={(selection: any) => updateFilter(filter.uid, selection)}
+          
         >
           {filteredOptions(filter).map((option: any) => (
             <AutocompleteItem 
