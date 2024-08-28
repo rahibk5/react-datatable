@@ -217,8 +217,8 @@ export default function App({ columns, data, filterOptions, searchable, customCl
           key={filter.uid}
           label="" 
           classNames={{
-            base: "w-max bg-white dark:bg-[#122031] shadow",
-            listboxWrapper: "max-h-[320px]",
+            base: "w-max bg-white dark:bg-[#122031]",
+            listboxWrapper: "max-h-[320px] w-max bg-white dark:bg-[#122031] rounded shadow",
             selectorButton: "text-default-500"
           }}
           placeholder={filter.name}
